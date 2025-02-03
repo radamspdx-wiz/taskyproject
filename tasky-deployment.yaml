@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasky-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tasky
+  template:
+    metadata:
+      labels:
+        app: tasky
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+      serviceAccountName: tasky-admin
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+      - name: tasky
+        image: ghcr.io/radamspdx-wiz/tasky:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://admin:password123@10.0.1.197:27017/wizlab?authSource=admin"
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: tasky-secret
+              key: SECRET_KEY
+        - name: ENVIRONMENT
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tasky-service
+  namespace: default
+spec:
+  selector:
+    app: tasky
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
