@@ -58,6 +58,9 @@ jobs:
       - name: Verify AWS Authentication
         run: aws sts get-caller-identity
 
+      - name: Check EKS Cluster Authentication
+        run: aws eks describe-cluster --name $EKS_CLUSTER_NAME --region $AWS_REGION --query "cluster.status"
+
       - name: Update Kubeconfig
         run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
