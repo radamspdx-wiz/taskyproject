@@ -26,6 +26,12 @@ jobs:
       - name: Log in to GHCR
         run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
 
+      - name: Debug GitHub OIDC Token
+        run: |
+          echo "Fetching GitHub OIDC Token..."
+          curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+               "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com"
+
       - name: Build and Push Docker Image
         run: |
           IMAGE_TAG=$(date +%Y%m%d%H%M%S)
