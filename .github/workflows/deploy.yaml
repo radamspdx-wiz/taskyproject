@@ -54,8 +54,15 @@ jobs:
           role-session-name: GitHubActionsSession
           aws-region: us-east-2
           audience: sts.amazonaws.com
+
+      - name: Verify AWS Authentication
+        run: aws sts get-caller-identity
+
       - name: Update Kubeconfig
         run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+
+      - name: Verify Kubectl Access
+        run: kubectl get nodes
 
       - name: Update Deployment with New Image
         run: |
