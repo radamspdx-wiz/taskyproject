@@ -39,21 +39,12 @@ jobs:
     needs: build-and-push
     steps:
 
-      - name: Debug GitHub OIDC Token
-        run: |
-          echo "Fetching GitHub OIDC Token..."
-          TOKEN=$(curl -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL")
-          echo "Raw Token: $TOKEN"
-          echo "Decoded Token:"
-          echo $TOKEN | jq -R 'split(".") | .[1] | @base64d' | jq
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::058264145287:role/ra-GithubOIDC-EKS-Role
-          role-session-name: GitHubActionsSession
           aws-region: us-east-2
-          audience: sts.amazonaws.com
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       - name: Verify AWS Authentication
         run: aws sts get-caller-identity
