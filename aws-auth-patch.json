@@ -1,0 +1,5 @@
+{
+    "data": {
+        "mapRoles": "- rolearn: arn:aws:iam::058264145287:role/ra-GithubOIDC-EKS-Role\n  username: system:node:ra-GithubOIDC-EKS-Role\n  groups:\n    - system:masters"
+    }
+}
