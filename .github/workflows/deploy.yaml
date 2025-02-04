@@ -60,5 +60,5 @@ jobs:
 
       - name: Update Deployment with New Image
         run: |
-          kubectl set image deployment/tasky-deployment tasky=$IMAGE_NAME:${{ env.IMAGE_TAG }} -n default
+          kubectl set image deployment/tasky-deployment tasky=${{env.IMAGE_NAME}}:${{ env.IMAGE_TAG }} -n default
           kubectl rollout restart deployment/tasky-deployment -n default
