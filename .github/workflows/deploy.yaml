@@ -33,11 +33,11 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
-  deploy-to-eks:
-    name: Deploy to EKS
-    runs-on: ubuntu-latest
-    needs: build-and-push
-    steps:
+  # deploy-to-eks:
+  #   name: Deploy to EKS
+  #   runs-on: ubuntu-latest
+  #   needs: build-and-push
+  #   steps:
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -60,5 +60,5 @@ jobs:
 
       - name: Update Deployment with New Image
         run: |
-          kubectl set image deployment/tasky-deployment tasky-container=$IMAGE_NAME:${{ env.IMAGE_TAG }} -n default
+          kubectl set image deployment/tasky-deployment tasky=$IMAGE_NAME:${{ env.IMAGE_TAG }} -n default
           kubectl rollout restart deployment/tasky-deployment -n default
